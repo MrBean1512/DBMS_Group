@@ -1,4 +1,3 @@
-
 //import 'package:flutter/material.dart';
 //import 'package:flutter/foundation.dart';
 
@@ -7,17 +6,18 @@
 //import 'dart:html';
 import 'dart:core';
 import 'dart:convert';
+import "sql_connect.dart";
 
 //TODO
 //this will likely be a useful resource: https://dart.dev/tutorials/web/fetch-data
 //add functions to...
 //updata local data from remote database (alexis' stuff)
 //push new tasks to alexis' database
-  //delete old tasks
-  //due to some limitations of the dateTime variable in dart, editing an existing task will add a new task and delete the old one
+//delete old tasks
+//due to some limitations of the dateTime variable in dart, editing an existing task will add a new task and delete the old one
 //handle shared tasks
-  //leave currently shared tasks
-  //add members to your current task
+//leave currently shared tasks
+//add members to your current task
 
 // Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
 Map populateFromJson() {
@@ -27,6 +27,8 @@ Map populateFromJson() {
     "dateTime": ["2020-12-20 20:00:00Z", "2020-16-20 20:00:00Z", "2020-12-20 20:00:00Z", "2020-12-20 20:00:00Z", "2020-12-20 20:00:00Z"],
     "completed": [false, false, false, false, false]
   }''';
+
+  //sqlConnect();
 
   Map jsonData = json.decode(jsonDataAsString);
   return jsonData;
