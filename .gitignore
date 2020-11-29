@@ -1,17 +1,3 @@
-# As specified by Databases Group Project
-# All lines before "# Miscellaneous" were added by David Martin
-# The lines after were left in case we decide to push everything but want to keep recommended settings
-# "*" asterisk specifies everything
-*
-!lib/
-!**/lib/
-!**/lib/*.dart
-!.gitignore
-!pubspec.yaml
-!Readme.md
-!bin/
-!**/bin/**
-
 # Miscellaneous
 *.class
 *.log

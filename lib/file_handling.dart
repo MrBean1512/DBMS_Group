@@ -1,41 +1,33 @@
-/*
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 
-import 'dart:io';
-import 'dart:async';
+//import 'package:flutter/material.dart';
+//import 'package:flutter/foundation.dart';
 
-class Storage {
+//import 'dart:io';
+//import 'dart:async';
+//import 'dart:html';
+import 'dart:core';
+import 'dart:convert';
 
-  //returns the path in which data for the game is stored
-  Future<String> get localPath async {
-    final dir= await getApplicationDocumentsDirectory();
-    return dir.path;
-  }
+//TODO
+//this will likely be a useful resource: https://dart.dev/tutorials/web/fetch-data
+//add functions to...
+//updata local data from remote database (alexis' stuff)
+//push new tasks to alexis' database
+  //delete old tasks
+  //due to some limitations of the dateTime variable in dart, editing an existing task will add a new task and delete the old one
+//handle shared tasks
+  //leave currently shared tasks
+  //add members to your current task
 
-  //returns the file in which the data for the game is stored
-  Future<File> get localFile async {
-    final path = await localPath;
-    return File('$path/db.txt');
-  }
+// Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
+Map populateFromJson() {
+  final jsonDataAsString = '''{
+    "title": ["take out trash", "do homework", "feed the dog", "call grandma", "start pork roast"],
+    "description": [" ", "CS pg 349 and GE", "2 scoops of chow", " ", "add half brick of butter and some pepper"],
+    "dateTime": ["2020-12-20 20:00:00Z", "2020-16-20 20:00:00Z", "2020-12-20 20:00:00Z", "2020-12-20 20:00:00Z", "2020-12-20 20:00:00Z"],
+    "completed": [false, false, false, false, false]
+  }''';
 
-  //returns the data in the file as a story object
-  Future<Data> readData() async{
-    try{
-      final file = await localFile;
-      Data body = (await file.readAsString()) as Data;
-      return body;
-    }
-    catch (e) {
-      return e.toString() as Data;
-    }
-  }
-
-  //writes the data of the story object as a string into the file and returns the file
-  Future<File> writeData(Data data) async {
-    final file = await localFile;
-    return file.writeAsString("$data");
-  }
+  Map jsonData = json.decode(jsonDataAsString);
+  return jsonData;
 }
-*/
