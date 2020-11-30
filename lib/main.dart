@@ -1,7 +1,7 @@
 //Main.dart: Creation of app - intially linked to menu
 
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'app_page.dart';
 import 'file_handling.dart';
 
 void main() {
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: HomePage(title: 'Task Manager'),
+      home: AppPage(title: 'Task Manager'),
     );
   }
 }

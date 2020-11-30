@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import "task_list.dart";
+import 'page_home.dart';
+import 'page_calendar.dart';
+import 'page_agenda.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+class AppPage extends StatefulWidget {
+  AppPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -17,29 +19,33 @@ class HomePage extends StatefulWidget {
   final String title;
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _AppPageState createState() => _AppPageState();
 }
 
+class _AppPageState extends State<AppPage> {
+  //simple stateful interactions are now handled within their respective widget
+  int currentTab = 0;
 
+  PageHome home;
+  PageCalendar calendar;
+  PageAgenda agenda;
+  List<Widget> pages;
+  Widget currentPage;
 
-class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    home = PageHome();
+    calendar = PageCalendar();
+    agenda = PageAgenda();
+
+    pages = [home, calendar, agenda];
+
+    currentPage = home;
+    super.initState();
+  }
+
+  /* depricated code
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -51,9 +57,7 @@ class _HomePageState extends State<HomePage> {
       // called again, and so nothing would appear to happen.
     });
   }
-
-
-
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -65,26 +69,14 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
+        // Here we take the value from the AppPage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body:
-        Center(child:
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Image.asset('assets/images/4x/home_tasksxxxhdpi.png'
-              )
-            ),
-            Expanded( child:
-              buildTaskList(),
-            ),
-          ],),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
+      body: currentPage,
+      //call the current page to be displayed
+      bottomNavigationBar: BottomNavigationBar(
+        //navigation bar along the bottom of the app
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -92,17 +84,23 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Clendar',
+            label: 'Calendar',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'School',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green[200],
-        onTap: _onItemTapped,
-        
+        currentIndex: currentTab,
+        unselectedItemColor: Colors.green[950],
+        selectedItemColor: Colors.grey[200],
+        onTap: (int index) {
+          setState(() {
+            currentTab = index;
+            currentPage = pages[index];
+          });
+        },
+        backgroundColor: Colors.green,
       ),
     );
   }
