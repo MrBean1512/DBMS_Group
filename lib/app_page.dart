@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'page_home.dart';
 import 'page_calendar.dart';
 import 'page_agenda.dart';
+import 'file_handling.dart';
 
 class AppPage extends StatefulWidget {
+  
   AppPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -24,7 +26,9 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   //simple stateful interactions are now handled within their respective widget
+  
   int currentTab = 0;
+  Map tasks = populateFromJson();
 
   PageHome home;
   PageCalendar calendar;

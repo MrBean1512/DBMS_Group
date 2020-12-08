@@ -4,11 +4,18 @@ import "task_list.dart";
 
 //this is the agenda page of the app
 //it should show a list of upcoming tasks as specified by the user
-class PageAgenda extends StatelessWidget {
+
+class PageAgenda extends StatefulWidget {
   @override
-  Widget build(BuildContext contect) {
+  _PageAgendaState createState() => _PageAgendaState();
+}
+
+class _PageAgendaState extends State<PageAgenda> {
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
     return Center(
-      child: buildTaskList(),
+      child: buildTaskList(context, _formKey),
     );
   }
 }

@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'app_page.dart';
 import 'file_handling.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: App(), //create an instance of the menu
-  ));
+  //sqlGetJsonTasks();
+  initializeDateFormatting().then((_) => runApp(MaterialApp(
+        home: App(), //create an instance of the menu
+      )));
 }
 
 class App extends StatelessWidget {
