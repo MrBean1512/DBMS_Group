@@ -87,10 +87,8 @@ Future<Map> getMapFromJson([DateTime start, DateTime end]) async {
   return data;
 }
 
-populateJson([DateTime start, DateTime end]) {
-  String query = 'select * from task_manager.task;';
-  writeData(getQuery(query));
-}
+
+
 
 Map getMapFromJsonC() {
   //this is used for the calendar
@@ -112,6 +110,19 @@ Map getMapFromJsonC() {
 /////////////////////////////////////////////////////////////////////////
 //The following section contains file io related functions
 /////////////////////////////////////////////////////////////////////////
+//*important*
+//methods in this section are not necessary for handling tasks in the
+//application, avoid these if possible and dynamically update application
+//directly with the dbms, this should only be used to store cookies
+//and possibly custom settings as the app continues to develop
+
+
+///write dbms data into json file
+///note this does not currently function properly
+populateJson([DateTime start, DateTime end]) {
+  String query = 'select * from task_manager.task;';
+  writeData(getQuery(query));
+}
 
 ///get the local file path
 Future<String> get _localPath async {
