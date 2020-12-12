@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   mysql1: ^0.17.1
   table_calendar: ^2.3.1
+  path_provider: ^1.6.24
+  datetime_picker_formfield: ^1.0.0
+  http: ^0.12.2
 
 
   # The following adds the Cupertino Icons font to your application.

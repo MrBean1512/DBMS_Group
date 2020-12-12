@@ -14,8 +14,39 @@ class _PageAgendaState extends State<PageAgenda> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: buildTaskList(context, _formKey),
+    return Column(children: [
+      _buildButtons(),
+      Expanded(
+          // wrap in Expanded
+          child:
+              buildTaskList(DateTime.now(), DateTime.now(), context, _formKey)),
+    ]);
+  }
+
+  Widget _buildButtons() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        RaisedButton(
+          child: Text('2 Days'),
+          onPressed: () {
+            setState(() {});
+          },
+        ),
+        RaisedButton(
+          child: Text('1 Week'),
+          onPressed: () {
+            setState(() {});
+          },
+        ),
+        RaisedButton(
+          child: Text('2 Weeks'),
+          onPressed: () {
+            setState(() {});
+          },
+        ),
+      ],
     );
   }
 }

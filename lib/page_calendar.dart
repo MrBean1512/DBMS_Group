@@ -1,6 +1,6 @@
 /*
 Much of the code in this portion is not my own and was copied directly from the
-package creator here: https://pub.dev/packages/table_calendar/example
+calendar package creator here: https://pub.dev/packages/table_calendar/example
 */
 
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _PageCalendarState extends State<PageCalendar>
     with TickerProviderStateMixin {
   //Map<DateTime, List> _events;
   var _events = <DateTime, List>{};
-  Map tasks = populateFromJson();
+  Map tasks = getMapFromJsonC();
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
@@ -302,7 +302,7 @@ class _PageCalendarState extends State<PageCalendar>
               },
             ),
           ],
-        ),
+        ),/*
         const SizedBox(height: 8.0),
         RaisedButton(
           child: Text(
@@ -314,6 +314,7 @@ class _PageCalendarState extends State<PageCalendar>
             );
           },
         ),
+        */
       ],
     );
   }

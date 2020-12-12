@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'page_home.dart';
 import 'page_calendar.dart';
 import 'page_agenda.dart';
+import 'page_login.dart';
 import 'file_handling.dart';
+import 'task_list.dart';
 
 class AppPage extends StatefulWidget {
-  
   AppPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -26,13 +27,13 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   //simple stateful interactions are now handled within their respective widget
-  
+
   int currentTab = 0;
-  Map tasks = populateFromJson();
 
   PageHome home;
   PageCalendar calendar;
   PageAgenda agenda;
+  //PageLogin login;
   List<Widget> pages;
   Widget currentPage;
 
@@ -41,24 +42,34 @@ class _AppPageState extends State<AppPage> {
     home = PageHome();
     calendar = PageCalendar();
     agenda = PageAgenda();
+    //login = PageLogin();
 
-    pages = [home, calendar, agenda];
+    pages = [
+      home,
+      calendar,
+      agenda,
+    ];
 
     currentPage = home;
     super.initState();
   }
+  /*
+  int _counter = 0;
+  var db = new Mysql();
+  var mail = '';
 
-  /* depricated code
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+  void _getCustomer() {
+    print("button pressed");
+    db.getConnection().then((conn) {
+      String sql = 'select title from task_manager.task;';
+      conn.query(sql).then((results) {
+        for (var row in results) {
+          setState(() {
+            mail = row[0];
+          });
+        }
+      });
+      conn.close();
     });
   }
   */
@@ -76,9 +87,43 @@ class _AppPageState extends State<AppPage> {
         // Here we take the value from the AppPage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        //title: Text('$mail')
       ),
       body: currentPage,
       //call the current page to be displayed
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Stack(
+                  overflow: Overflow.visible,
+                  children: <Widget>[
+                    NewTaskForm(),
+                    Positioned(
+                      right: -40.0,
+                      bottom: -40.0,
+                      child: InkResponse(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: CircleAvatar(
+                          child: Icon(Icons.delete),
+                          backgroundColor: Colors.red[100],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+          });
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         //navigation bar along the bottom of the app
         items: const <BottomNavigationBarItem>[
@@ -91,9 +136,13 @@ class _AppPageState extends State<AppPage> {
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
+            icon: Icon(Icons.list),
+            label: 'Agenda',
           ),
+          //BottomNavigationBarItem(
+          //  icon: Icon(Icons.login),
+          //  label: 'Login',
+          //),
         ],
         currentIndex: currentTab,
         unselectedItemColor: Colors.green[950],
@@ -106,6 +155,13 @@ class _AppPageState extends State<AppPage> {
         },
         backgroundColor: Colors.green,
       ),
+      /*
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getCustomer,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+      */
     );
   }
 }

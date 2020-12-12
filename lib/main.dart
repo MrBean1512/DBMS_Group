@@ -6,10 +6,11 @@ import 'file_handling.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  //sqlGetJsonTasks();
+  //populateJson();
+  //getQuery('select * from task_manager.task;');
   initializeDateFormatting().then((_) => runApp(MaterialApp(
         home: App(), //create an instance of the menu
-      )));
+  )));
 }
 
 class App extends StatelessWidget {
@@ -34,3 +35,36 @@ class App extends StatelessWidget {
     );
   }
 }
+
+/*
+TODO
+this will likely be a useful resource: https://dart.dev/tutorials/web/fetch-data
+sql
+  getQuery()
+    write to json
+  submitQuery()
+file handling
+  write query to a json file
+    maybe write the query to a map and then map to json
+  retrieve a map from the json file
+task managing
+  add a new task
+  edit an existing task
+    delete existing task and then add new one
+    complete a task, change the color, change description or title
+  delete a task
+finish ui
+  page today
+    add "today" header
+    only show today's tasks
+  page calendar
+    try to have it use the task Map
+    show task description and due time
+    optionally add editing features to it
+    optionally remove viewing options and insert calendar into list widget
+  page agenda
+    add '2 days' view button
+    add '1 week' view button
+    add 'category' view button
+      optionally use '2 week' view button if time doesn't permit this
+*/

@@ -1,50 +1,99 @@
 //import 'package:flutter/material.dart';
 //import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'dart:core';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+
+//'select title from task_manager.task;'
 
 import 'package:mysql1/mysql1.dart';
 
-import 'dart:io';
-//import 'dart:async';
-//import 'dart:html';
-import 'dart:core';
-import 'dart:convert';
+class Mysql {
+  static String host = '10.0.2.2',
+      user = 'testuser',
+      password = 'password',
+      db = 'task_manager';
+  static int port = 3306;
 
-/*
-TODO
-this will likely be a useful resource: https://dart.dev/tutorials/web/fetch-data
-sql
-  getQuery()
-    write to json
-  submitQuery()
-file handling
-  write query to a json file
-    maybe write the query to a map and then map to json
-  retrieve a map from the json file
-task managing
-  add a new task
-  edit an existing task
-    delete existing task and then add new one
-    complete a task, change the color, change description or title
-  delete a task
-finish ui
-  page today
-    add "today" header
-    only show today's tasks
-  page calendar
-    try to have it use the task Map
-    show task description and due time
-    optionally add editing features to it
-    optionally remove viewing options and insert calendar into list widget
-  page agenda
-    add '2 days' view button
-    add '1 week' view button
-    add 'category' view button
-      optionally use '2 week' view button if time doesn't permit this
-*/
+  Mysql();
+
+  Future<MySqlConnection> getConnection() async {
+    var settings = new ConnectionSettings(
+        host: host, port: port, user: user, password: password, db: db);
+    return await MySqlConnection.connect(settings);
+  }
+}
 
 // Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
-Map populateFromJson() {
-  //final jsonDataAsString = new File('tasks.txt').readAsStringSync();
+Future<Map> getMapFromJson([DateTime start, DateTime end]) async {
+  print("getMapFromJson");
+  //Map data = await readData();
+  //DateTime start = recStart;
+  //DateTime end = recEnd;
+  String query = 'select * from task_manager.task where ownerID = 1';
+  if ((start != null && end != null) && (start.isBefore(end))) {
+    start = start.subtract(Duration(hours: start.hour));
+    start = start.subtract(Duration(minutes: start.minute));
+    start = start.subtract(Duration(seconds: start.second));
+    start = start.subtract(Duration(milliseconds: start.millisecond));
+    start = start.subtract(Duration(microseconds: start.microsecond));
+
+    end = end.add(Duration(hours: 23 - end.hour));
+    end = end.add(Duration(minutes: 59 - end.minute));
+    end = end.add(Duration(seconds: 59 - end.second));
+    end = end.add(Duration(milliseconds: 999 - end.millisecond));
+    end = end.subtract(Duration(microseconds: end.microsecond));
+
+    query =
+        "SELECT * FROM task_manager.task WHERE dateTime >= '$start' AND dateTime <= '$end' AND ownerID = 1;";
+  } else {
+    print(
+        "There was a problem with the start and end dates in the query, showing all tasks for this user");
+  }
+
+  Map data = await getQuery(query);
+  print(data);
+  if (data == null) {
+    //use the following commented code (jsonData) as for placeholder data
+    data = {
+      "id": [1, 2, 3, 4, 5],
+      "title": [
+        "an error occured",
+        "these are placeholder tasks",
+        "feed the dog",
+        "call grandma",
+        "start pork roast"
+      ],
+      "description": [
+        "while retrieving the dbms data",
+        "CS pg 349 and GE",
+        "2 scoops of chow",
+        " ",
+        "add half brick of butter and some pepper"
+      ],
+      "dateTime": [
+        "2020-12-12 20:00:00.000",
+        "2020-12-12 20:00:00.000",
+        "2020-12-12 20:00:00.000",
+        "2020-12-20 20:00:00.000",
+        "2020-12-20 20:00:00.000"
+      ],
+      "completed": [false, false, false, false, false]
+    };
+  }
+  return data;
+}
+
+populateJson([DateTime start, DateTime end]) {
+  String query = 'select * from task_manager.task;';
+  writeData(getQuery(query));
+}
+
+Map getMapFromJsonC() {
+  //this is used for the calendar
 
   final jsonDataAsString = '''{
       "id": [1, 2, 3, 4, 5],
@@ -60,67 +109,101 @@ Map populateFromJson() {
   return jsonData;
 }
 
-void addNewTask(
-    String title, String description, DateTime dateTime, String category) {}
+/////////////////////////////////////////////////////////////////////////
+//The following section contains file io related functions
+/////////////////////////////////////////////////////////////////////////
 
-void deleteTask(int id) {}
+///get the local file path
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
 
-Future sqlGetJsonTasks() async {
-  //connection configuration to log into database
-  /*
-  MySqlConnection.connect(ConnectionSettings(
-          host: 'localhost',
-          port: 3306,
-          user: 'admin',
-          password: '#1Dmartin21',
-          db: 'task_manager'))
-      .then((conn) {
-    //Run and execute a query
-    conn.query('SELECT * FROM Task.tasks').then((results) {
-      List.from(results).forEach((row) {
-        // waits a certain amount of time before printing a result. Necessary to give the system
-        // enough time to do what it needs to before closing the program too early
-        Future.delayed(const Duration(milliseconds: 1000), () {
-          print('Name: ${row[0]}');
-        });
-      });
-
-      if (File('tasks.txt').existsSync() == true) {
-        File('tasks.txt').deleteSync();
-      }
-      new File('tasks.txt').createSync();
-
-      conn.close(); // closing database connection here
-    });
-  });
-  */
-  var conn = await MySqlConnection.connect(ConnectionSettings(
-      host: 'localhost',
-      port: 3306,
-      user: 'admin',
-      password: '#1Dmartin21',
-      db: 'task_manager'));
-
-  var results = await conn.query('SELECT FROM task');
-  for (var row in results) {
-    print('Name: ${row[0]}, email: ${row[1]}');
-  }
-
-  conn.close(); // closing database connection here
+  return directory.path;
 }
 
-Future sqlAddData(String query) async {
-  //connection configuration to log into database
-  MySqlConnection.connect(ConnectionSettings(
-          host: 'localhost',
-          port: 3306,
-          user: 'admin',
-          password: '#1Dmartin21',
-          db: 'task_manager'))
-      .then((conn) {
-    //Run and execute a query
-    conn.query(query).then((results) {
-      conn.close(); // closing database connection here
-    });
-  });
+///get the local file
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/data.json');
+}
+
+///write data into the file
+Future<File> writeData(Future<Map> data) async {
+  final file = await _localFile;
+
+  // Write the file.
+  print("write data");
+  return file.writeAsString(jsonEncode(data));
+}
+
+///read data from the file
+Future<Map> readData() async {
+  try {
+    final file = await _localFile;
+
+    // Read the file.
+    String contents = await file.readAsString();
+    Map data = json.decode(contents);
+    return (data);
+  } catch (e) {
+    // If encountering an error, return 0.
+    return null;
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////
+///The following section contains SQL related functions
+/////////////////////////////////////////////////////////////////////////
+
+///establish a connecion and submit a query to mySQL
+Future<Results> performQueryOnMySQL(String query) async {
+  print("performQueryOnMySQL");
+  // Open a connection
+  try {
+    var settings = new ConnectionSettings(
+      host: '10.0.2.2',
+      port: 3306,
+      user: 'testuser', // test user to login into with using unsecure password
+      password: "password",
+      db: 'task_manager',
+    );
+
+    var conn = await MySqlConnection.connect(settings);
+
+    //figured it would at least get here so i could see if it worked but i dont think it gets there
+    if (conn == null) {
+      print('ERROR - COULD NOT CONNECT TO DBMS');
+    }
+
+    var results = await conn.query(query);
+
+    conn.close();
+    return results;
+  } catch (e) {
+    print("ERROR WITH QUERY -> $e");
+    return e;
+  }
+}
+
+///send a query to the dbms and recieve the query table as a <map>
+Future<Map> getQuery(String query) async {
+  print("getQuery()");
+  //query the dbms
+
+  Results results = await performQueryOnMySQL(query);
+
+  //initialize the map keys with the field keys
+  Map tasks = {};
+  //print(results.elementAt(0).fields.keys);
+  for (var i = 0; i < results.elementAt(0).fields.keys.length; i++) {
+    tasks[results.elementAt(0).fields.keys.elementAt(i)] = [];
+    for (var row in results) {
+      //print(row[i]);
+      tasks[row.fields.keys.elementAt(i)].add(row[i]);
+    }
+  }
+  //transfer values into map
+  //for (var row in results) {
+  //  print(row.values);
+  //}
+  return (tasks);
 }
