@@ -53,10 +53,10 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
     print(
         "There was a problem with the start and end dates in the query, showing all tasks for this user");
   }
-
+  print("getquery: $query");
   Map data = await getQuery(query);
   print(data);
-  if (data == null) {
+  if (data == {}) {
     //use the following commented code (jsonData) as for placeholder data
     data = {
       "id": [1, 2, 3, 4, 5],
@@ -98,28 +98,33 @@ void newFormQuery(String title, String description, int category,
   String query =
       "INSERT INTO task (title, ownerID, description, dateTime, completion, recurringID, categoryID) "
       "VALUES ('$title', $userID, '$description', '$dateTime', false, 1, $category);";
-  print(query);
+  print("newquery: $query");
   justQuery(query);
 }
 
 void updateFormQuery(String title, String description, int category,
-    String dateTime, int taskID) {
+    String strDateTime, int taskID) {
   //check for and remove the letter 'Z' from the end of the dateTime string
   //dart seems to automatically add 'Z to dateTime values pulled from the dbms
-  List<String> c = dateTime.split(""); // [...'0', '.', '0', '0', '0', 'Z']
-  if (c.last == 'Z') {
-    c.removeLast(); // [...'0', '.', '0', '0', '0']
-  }
-  dateTime = c.join(); //...0.000
-
+  DateTime dateTime = DateTime.parse(strDateTime);
+  dateTime = dateTime.subtract(Duration(microseconds: dateTime.microsecond));
   String query = "UPDATE task SET "
       "title = '$title', "
       "description = '$description', "
       "categoryID = $category, "
       "dateTime = '$dateTime' "
       "WHERE task.ID = $taskID;";
-  print(query);
+  print("updatequery: $query");
   justQuery(query);
+}
+
+Future<int> validateLogin(String username, String password) async {
+  print("validateLogin");
+  String query =
+      "select ID from task_manager.user where username = '$username' AND password = '$password';";
+  Results results = await performQueryOnMySQL(query);
+  int userID = results.elementAt(0).values[0];
+  print("userID: $userID");
 }
 
 Map getMapFromJsonCal() {
@@ -173,7 +178,6 @@ Future<File> writeData(Future<Map> data) async {
   final file = await _localFile;
 
   // Write the file.
-  print("write data");
   return file.writeAsString(jsonEncode(data));
 }
 
@@ -198,7 +202,6 @@ Future<Map> readData() async {
 
 ///establish a connecion and submit a query to mySQL
 Future<Results> performQueryOnMySQL(String query) async {
-  print("performQueryOnMySQL");
   // Open a connection
   try {
     var settings = new ConnectionSettings(
@@ -215,9 +218,9 @@ Future<Results> performQueryOnMySQL(String query) async {
     if (conn == null) {
       print('ERROR - COULD NOT CONNECT TO DBMS');
     }
-
+    print("query: $query");
     var results = await conn.query(query);
-
+    print("results: $results");
     conn.close();
     return results;
   } catch (e) {
@@ -228,11 +231,9 @@ Future<Results> performQueryOnMySQL(String query) async {
 
 ///send a query to the dbms and recieve the query table as a <map>
 Future<Map> getQuery(String query) async {
-  print("getQuery()");
   //query the dbms
 
   Results results = await performQueryOnMySQL(query);
-
   //initialize the map keys with the field keys
   Map tasks = {};
   //print(results.elementAt(0).fields.keys);

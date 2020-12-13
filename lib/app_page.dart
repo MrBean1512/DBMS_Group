@@ -4,7 +4,6 @@ import 'page_home.dart';
 import 'page_calendar.dart';
 import 'page_agenda.dart';
 import 'page_login.dart';
-import 'file_handling.dart';
 import 'task_list.dart';
 
 class AppPage extends StatefulWidget {
@@ -33,7 +32,6 @@ class _AppPageState extends State<AppPage> {
   PageHome home;
   PageCalendar calendar;
   PageAgenda agenda;
-  //PageLogin login;
   List<Widget> pages;
   Widget currentPage;
 
@@ -42,7 +40,6 @@ class _AppPageState extends State<AppPage> {
     home = PageHome();
     calendar = PageCalendar();
     agenda = PageAgenda();
-    //login = PageLogin();
 
     pages = [
       home,
@@ -90,6 +87,7 @@ class _AppPageState extends State<AppPage> {
         //title: Text('$mail')
       ),
       body: currentPage,
+      
       //call the current page to be displayed
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -102,19 +100,6 @@ class _AppPageState extends State<AppPage> {
                   overflow: Overflow.visible,
                   children: <Widget>[
                     NewTaskForm(),
-                    Positioned(
-                      right: -40.0,
-                      bottom: -40.0,
-                      child: InkResponse(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          child: Icon(Icons.delete),
-                          backgroundColor: Colors.red[100],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               );

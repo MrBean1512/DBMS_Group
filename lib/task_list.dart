@@ -35,7 +35,6 @@ FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
           //number of widgets to create, used by index
           //this is the same as tasks.entries.first.value.length
           itemBuilder: (context, index) {
-            print("index = $index");
             //iterate through Map to make task objects
             if (index == 0) {
               //if it's the first iteration of the loop
