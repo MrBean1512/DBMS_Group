@@ -32,7 +32,7 @@ class _PageCalendarState extends State<PageCalendar>
     with TickerProviderStateMixin {
   //Map<DateTime, List> _events;
   var _events = <DateTime, List>{};
-  Map tasks = getMapFromJsonC();
+  Map tasks = getMapFromJsonCal();
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;

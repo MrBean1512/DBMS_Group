@@ -2,7 +2,6 @@
 //used this package to help handle date/time selections
 //https://pub.dev/packages/datetime_picker_formfield
 
-
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +18,7 @@ FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
   Map tasks;
   //Map tasks = getMapFromJson(start, end); //Map is created from json file
   return (FutureBuilder(
-      future: getMapFromJson(start, end),
+      future: getMapQuery(start, end),
       builder: (context, projectSnap) {
         /*
         if (projectSnap.connectionState == ConnectionState.none &&
@@ -113,7 +112,7 @@ InkWell buildTaskBox(context, _formKey, Map tasks, int taskIndex) {
             });
       },
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(16),
         color: Colors.green[50],
         child: Row(
           children: [
@@ -244,6 +243,7 @@ class NewTaskFormState extends State<NewTaskForm> {
                   print("title: ${_titleTextController.text}");
                   print("description: ${_descriptionTextController.text}");
                   print("dateTime: ${_dateTimeController.text}");
+                  newFormQuery(_titleTextController.text, _descriptionTextController.text, 1, _dateTimeController.text, 1);
                   Navigator.pop(context);
                 }
               },
@@ -298,10 +298,10 @@ class EditTaskFormState extends State<EditTaskForm> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(
-                labelText: 'Title'),
+            decoration: InputDecoration(labelText: 'Title'),
             //initialValue: widget.tasks["title"][widget.index],
-            controller: _titleTextController..text = widget.tasks["title"][widget.index],
+            controller: _titleTextController
+              ..text = widget.tasks["title"][widget.index],
             //controller must be null if an initialValue is specified
             validator: (value) {
               if (value.isEmpty) {
@@ -313,7 +313,8 @@ class EditTaskFormState extends State<EditTaskForm> {
           TextFormField(
             decoration: InputDecoration(labelText: 'Description'),
             //initialValue: widget.tasks["description"][widget.index],
-            controller: _descriptionTextController..text = widget.tasks["description"][widget.index],
+            controller: _descriptionTextController
+              ..text = widget.tasks["description"][widget.index],
           ),
           DateTimeField(
             //The code in the DateTimeField() was coppied from the
@@ -324,7 +325,8 @@ class EditTaskFormState extends State<EditTaskForm> {
             //at all
             decoration: InputDecoration(labelText: 'Date and Time'),
             //initialValue: widget.tasks["dateTime"][widget.index],
-            controller: _dateTimeController..text = widget.tasks["dateTime"][widget.index].toString(),
+            controller: _dateTimeController
+              ..text = widget.tasks["dateTime"][widget.index].toString(),
             format: DateFormat("yyyy-MM-dd HH:mm"),
             onShowPicker: (context, currentValue) async {
               final date = await showDatePicker(
@@ -358,6 +360,8 @@ class EditTaskFormState extends State<EditTaskForm> {
                   print("title: ${_titleTextController.text}");
                   print("description: ${_descriptionTextController.text}");
                   print("dateTime: ${_dateTimeController.text}");
+                  
+                  updateFormQuery(_titleTextController.text, _descriptionTextController.text, 1, _dateTimeController.text, widget.tasks["ID"][widget.index]);
                   Navigator.pop(context);
                 }
               },

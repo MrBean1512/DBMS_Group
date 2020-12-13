@@ -28,7 +28,7 @@ class Mysql {
 }
 
 // Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
-Future<Map> getMapFromJson([DateTime start, DateTime end]) async {
+Future<Map> getMapQuery([DateTime start, DateTime end]) async {
   print("getMapFromJson");
   //Map data = await readData();
   //DateTime start = recStart;
@@ -87,10 +87,42 @@ Future<Map> getMapFromJson([DateTime start, DateTime end]) async {
   return data;
 }
 
+///submit a query where no data is expected in return
+void justQuery(String query) async {
+  Map data = await getQuery(query);
+  print(data);
+}
 
+void newFormQuery(String title, String description, int category,
+    String dateTime, int userID) {
+  String query =
+      "INSERT INTO task (title, ownerID, description, dateTime, completion, recurringID, categoryID) "
+      "VALUES ('$title', $userID, '$description', '$dateTime', false, 1, $category);";
+  print(query);
+  justQuery(query);
+}
 
+void updateFormQuery(String title, String description, int category,
+    String dateTime, int taskID) {
+  //check for and remove the letter 'Z' from the end of the dateTime string
+  //dart seems to automatically add 'Z to dateTime values pulled from the dbms
+  List<String> c = dateTime.split(""); // [...'0', '.', '0', '0', '0', 'Z']
+  if (c.last == 'Z') {
+    c.removeLast(); // [...'0', '.', '0', '0', '0']
+  }
+  dateTime = c.join(); //...0.000
 
-Map getMapFromJsonC() {
+  String query = "UPDATE task SET "
+      "title = '$title', "
+      "description = '$description', "
+      "categoryID = $category, "
+      "dateTime = '$dateTime' "
+      "WHERE task.ID = $taskID;";
+  print(query);
+  justQuery(query);
+}
+
+Map getMapFromJsonCal() {
   //this is used for the calendar
 
   final jsonDataAsString = '''{
@@ -115,7 +147,6 @@ Map getMapFromJsonC() {
 //application, avoid these if possible and dynamically update application
 //directly with the dbms, this should only be used to store cookies
 //and possibly custom settings as the app continues to develop
-
 
 ///write dbms data into json file
 ///note this does not currently function properly
