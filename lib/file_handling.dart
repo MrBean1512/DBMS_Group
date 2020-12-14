@@ -35,12 +35,14 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
   //DateTime end = recEnd;
   String query = 'select * from task_manager.task where ownerID = 1';
   if ((start != null && end != null) && (start.isBefore(end))) {
+    start = start;
     start = start.subtract(Duration(hours: start.hour));
     start = start.subtract(Duration(minutes: start.minute));
     start = start.subtract(Duration(seconds: start.second));
     start = start.subtract(Duration(milliseconds: start.millisecond));
     start = start.subtract(Duration(microseconds: start.microsecond));
 
+    end = end;
     end = end.add(Duration(hours: 23 - end.hour));
     end = end.add(Duration(minutes: 59 - end.minute));
     end = end.add(Duration(seconds: 59 - end.second));
@@ -48,7 +50,7 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
     end = end.subtract(Duration(microseconds: end.microsecond));
 
     query =
-        "SELECT * FROM task_manager.task WHERE dateTime >= '${start.toUtc()}' AND dateTime <= '${end.toUtc()}' AND ownerID = 1;";
+        "SELECT * FROM task_manager.task WHERE dateTime >= '$start' AND dateTime <= '$end' AND ownerID = 1;";
   }
 
   print("getquery: $query");
@@ -82,6 +84,10 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
       "completed": [false, false, false, false, false]
     };
   }
+
+  for (int i = 0; i < data.entries.first.value.length; i++) {
+    data["dateTime"][i] = data["dateTime"][i].toLocal();
+  }
   return data;
 }
 
@@ -94,12 +100,14 @@ void justQuery(String query) async {
 void newFormQuery(String title, String description, int category,
     String strDateTime, int userID) {
   DateTime dateTime = DateTime.parse(strDateTime);
+  //dateTime = dateTime.toUtc();
   dateTime = dateTime.subtract(Duration(microseconds: dateTime.microsecond));
   String query =
       "INSERT INTO task (title, ownerID, description, dateTime, completion, recurringID, categoryID) "
-      "VALUES ('$title', $userID, '$description', '${dateTime.toUtc()}', false, 1, $category);";
+      "VALUES ('$title', $userID, '$description', '$dateTime', false, 1, $category);";
   //print("newquery: $query");
   justQuery(query);
+  print(query);
 }
 
 void updateFormQuery(String title, String description, int category,
@@ -107,15 +115,17 @@ void updateFormQuery(String title, String description, int category,
   //check for and remove the letter 'Z' from the end of the dateTime string
   //dart seems to automatically add 'Z to dateTime values pulled from the dbms
   DateTime dateTime = DateTime.parse(strDateTime);
+  //dateTime = dateTime.toUtc();
   dateTime = dateTime.subtract(Duration(microseconds: dateTime.microsecond));
   String query = "UPDATE task SET "
       "title = '$title', "
       "description = '$description', "
       "categoryID = $category, "
-      "dateTime = '${dateTime.toUtc()}' "
+      "dateTime = '$dateTime' "
       "WHERE task.ID = $taskID;";
   //print("updatequery: $query");
   justQuery(query);
+  print(query);
 }
 
 Future<int> validateLogin(String username, String password) async {

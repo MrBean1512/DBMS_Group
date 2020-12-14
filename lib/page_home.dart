@@ -14,8 +14,10 @@ class _PageHomeState extends State<PageHome> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: buildTaskList(DateTime.now(), DateTime.now(), context, _formKey, 'assets/images/4x/home_tasksxxxhdpi.png'),
+    return Column(
+      children: [
+        buildTaskList(DateTime.now(), DateTime.now(), context, _formKey, 'assets/images/4x/home_tasksxxxhdpi.png'),
+      ]
     );
   }
 }
