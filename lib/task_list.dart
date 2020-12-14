@@ -27,6 +27,10 @@ FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
           return Container();
         }
         */
+        if (!projectSnap.hasData) {
+          print("not showing calendar");
+          return Container();
+        } else
         return (ListView.separated(
           //begin construction of actual widget
           shrinkWrap: true,

@@ -1,10 +1,15 @@
-//this is the agenda page of the app
-//it should show a list of upcoming tasks as specified by the user
+/*
+page_login.dart:
+The login page requires users to log into an account before building the app.
+Users may enter a username and password which are checked together against the
+database. The userId is subsequentially passed in to load content relevant to
+only that user.
+*/
 
 import 'package:flutter/material.dart';
 
 import 'file_handling.dart';
-import 'app_page.dart';
+import 'page_app.dart';
 
 class PageLogin extends StatefulWidget {
   PageLogin({Key key, this.title}) : super(key: key);
@@ -16,8 +21,6 @@ class PageLogin extends StatefulWidget {
 }
 
 class _PageLoginState extends State<PageLogin> {
-  int _counter = 0;
-
   final _formKey = GlobalKey<FormState>();
   final _usernameTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
@@ -76,7 +79,7 @@ class _PageLoginState extends State<PageLogin> {
                             SnackBar(content: Text('Processing Data')));
                         validateLogin(_usernameTextController.text,
                             _passwordTextController.text);
-                        //if(validateLogin(_usernameTextController.text, _passwordTextController.text) >= 1) {
+                        //if(validateLogin(_usernameTextController.text, _passwordTextController.text) <= 0) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

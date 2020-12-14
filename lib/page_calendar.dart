@@ -1,12 +1,66 @@
-/*
-Much of the code in this portion is not my own and was copied directly from the
-calendar package creator here: https://pub.dev/packages/table_calendar/example
-*/
-
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'file_handling.dart';
+
+class PageCalendar extends StatefulWidget {
+  PageCalendar({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _PageCalendarState createState() => _PageCalendarState();
+}
+
+class _PageCalendarState extends State<PageCalendar> {
+
+  Future<Map> getEvents() async {
+    //convert the map of tasks
+    Map tasks = await getMapQuery();
+    Map<DateTime, List> events = {};
+    DateTime date;
+    String event;
+    for (var x = 0; x < tasks['dateTime'].length; x++) {
+      date = tasks['dateTime'][x];
+      date = date.subtract(Duration(hours: date.hour));
+      date = date.subtract(Duration(minutes: date.minute));
+      date = date.subtract(Duration(seconds: date.second));
+      date = date.subtract(Duration(milliseconds: date.millisecond));
+      date = date.subtract(Duration(microseconds: date.microsecond));
+      
+      event = tasks['title'][x];
+      if (events[date] == null) {
+        events[date] = [event];
+      } else {
+        events[date].add(event);
+      }
+      //_events[DateTime.parse(tasks['dateTime'][x])] = [tasks['dateTime'][x]];
+      //consider having the loop iterate through tasks instead
+    }
+    print("events: $events");
+    return events;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return
+        // Displays the score information
+        //https://stackoverflow.com/questions/53800662/how-do-i-call-async-property-in-widget-build-method
+        //https://stackoverflow.com/questions/52801201/flutter-renderbox-was-not-laid-out for using Expanded with ListView
+        Center(
+            child: FutureBuilder<Map>(
+                future: getEvents(),
+                builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
+                  if (!snapshot.hasData) {
+                    print("not showing calendar");
+                    return Container();
+                  } else {
+                    print("snapshot"); //: ${snapshot.data}");
+                    return Calendar(events: snapshot.data);
+                  }
+                }));
+  }
+}
 
 // Example holidays
 final Map<DateTime, List> _holidays = {
@@ -17,22 +71,26 @@ final Map<DateTime, List> _holidays = {
   DateTime(2020, 4, 22): ['Easter Monday'],
 };
 
+
 //  Copyright (c) 2019 Aleksander Woźniak
 //  Licensed under Apache License v2.0
-class PageCalendar extends StatefulWidget {
-  PageCalendar({Key key, this.title}) : super(key: key);
+//Much of the code in the calendar class is not my own and was copied directly from the
+//calendar package creator here: https://pub.dev/packages/table_calendar/example
+//there are many modifications throughout the code though
 
+class Calendar extends StatefulWidget {
+  Calendar({Key key, this.title, this.events}) : super(key: key);
+
+  final Map events;
   final String title;
 
   @override
-  _PageCalendarState createState() => _PageCalendarState();
+  _CalendarState createState() => _CalendarState();
 }
 
-class _PageCalendarState extends State<PageCalendar>
-    with TickerProviderStateMixin {
+class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   //Map<DateTime, List> _events;
-  var _events = <DateTime, List>{};
-  Map tasks = getMapFromJsonCal();
+  var _events;
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
@@ -41,20 +99,8 @@ class _PageCalendarState extends State<PageCalendar>
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
-    DateTime date;
-    String event;
 
-    for (var x = 0; x < tasks['dateTime'].length; x++) {
-      date = DateTime.parse(tasks['dateTime'][x]);
-      event = tasks['title'][x];
-      if (_events[date] == null) {
-        _events[date] = [event];
-      } else {
-        _events[date].add(event);
-      }
-      //_events[DateTime.parse(tasks['dateTime'][x])] = [tasks['dateTime'][x]];
-      //consider having the loop iterate through tasks instead
-    }
+    _events = widget.events;
 
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
@@ -117,13 +163,13 @@ class _PageCalendarState extends State<PageCalendar>
       events: _events,
       holidays: _holidays,
       startingDayOfWeek: StartingDayOfWeek.sunday,
-      daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle(color: Colors.blue[400])),
+      daysOfWeekStyle:
+          DaysOfWeekStyle(weekendStyle: TextStyle(color: Colors.blue[400])),
       calendarStyle: CalendarStyle(
         selectedColor: Colors.lightBlue[400],
         todayColor: Colors.lightBlue[200],
         markersColor: Colors.blue[800],
-        weekendStyle: TextStyle(color: Colors.blue[400]),  //0xFF2196F3
+        weekendStyle: TextStyle(color: Colors.blue[400]), //0xFF2196F3
         outsideDaysVisible: false,
       ),
       headerStyle: HeaderStyle(
@@ -140,133 +186,6 @@ class _PageCalendarState extends State<PageCalendar>
     );
   }
 
-  /*
-  // More advanced TableCalendar configuration (using Builders & Styles)
-  Widget _buildTableCalendarWithBuilders() {
-    return TableCalendar(
-      locale: 'pl_PL',
-      calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
-      initialCalendarFormat: CalendarFormat.month,
-      formatAnimation: FormatAnimation.slide,
-      startingDayOfWeek: StartingDayOfWeek.sunday,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const {
-        CalendarFormat.month: '',
-        CalendarFormat.week: '',
-      },
-      calendarStyle: CalendarStyle(
-        outsideDaysVisible: false,
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-        holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
-      ),
-      daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
-      ),
-      headerStyle: HeaderStyle(
-        centerHeaderTitle: true,
-        formatButtonVisible: false,
-      ),
-      builders: CalendarBuilders(
-        selectedDayBuilder: (context, date, _) {
-          return FadeTransition(
-            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-            child: Container(
-              margin: const EdgeInsets.all(4.0),
-              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-              color: Colors.deepOrange[300],
-              width: 100,
-              height: 100,
-              child: Text(
-                '${date.day}',
-                style: TextStyle().copyWith(fontSize: 16.0),
-              ),
-            ),
-          );
-        },
-        todayDayBuilder: (context, date, _) {
-          return Container(
-            margin: const EdgeInsets.all(4.0),
-            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.amber[400],
-            width: 100,
-            height: 100,
-            child: Text(
-              '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0),
-            ),
-          );
-        },
-        markersBuilder: (context, date, events, holidays) {
-          final children = <Widget>[];
-
-          if (events.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: _buildEventsMarker(date, events),
-              ),
-            );
-          }
-
-          if (holidays.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: -2,
-                top: -2,
-                child: _buildHolidaysMarker(),
-              ),
-            );
-          }
-
-          return children;
-        },
-      ),
-      onDaySelected: (date, events, holidays) {
-        _onDaySelected(date, events, holidays);
-        _animationController.forward(from: 0.0);
-      },
-      onVisibleDaysChanged: _onVisibleDaysChanged,
-      onCalendarCreated: _onCalendarCreated,
-    );
-  }
-  */
-  /*
-  Widget _buildEventsMarker(DateTime date, List events) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: _calendarController.isSelected(date)
-            ? Colors.brown[500]
-            : _calendarController.isToday(date)
-                ? Colors.brown[300]
-                : Colors.blue[400],
-      ),
-      width: 16.0,
-      height: 16.0,
-      child: Center(
-        child: Text(
-          '${events.length}',
-          style: TextStyle().copyWith(
-            color: Colors.white,
-            fontSize: 12.0,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHolidaysMarker() {
-    return Icon(
-      Icons.add_box,
-      size: 20.0,
-      color: Colors.blueGrey[800],
-    );
-  }
-  */
   Widget _buildButtons() {
     final dateTime = _events.keys.elementAt(_events.length - 2);
 
@@ -302,7 +221,7 @@ class _PageCalendarState extends State<PageCalendar>
               },
             ),
           ],
-        ),/*
+        ), /*
         const SizedBox(height: 8.0),
         RaisedButton(
           child: Text(

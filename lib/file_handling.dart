@@ -29,7 +29,7 @@ class Mysql {
 
 // Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
 Future<Map> getMapQuery([DateTime start, DateTime end]) async {
-  print("getMapFromJson");
+  print("getMapQuery");
   //Map data = await readData();
   //DateTime start = recStart;
   //DateTime end = recEnd;
@@ -48,11 +48,9 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
     end = end.subtract(Duration(microseconds: end.microsecond));
 
     query =
-        "SELECT * FROM task_manager.task WHERE dateTime >= '$start' AND dateTime <= '$end' AND ownerID = 1;";
-  } else {
-    print(
-        "There was a problem with the start and end dates in the query, showing all tasks for this user");
+        "SELECT * FROM task_manager.task WHERE dateTime >= '${start.toUtc()}' AND dateTime <= '${end.toUtc()}' AND ownerID = 1;";
   }
+
   print("getquery: $query");
   Map data = await getQuery(query);
   print(data);
@@ -90,15 +88,17 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
 ///submit a query where no data is expected in return
 void justQuery(String query) async {
   Map data = await getQuery(query);
-  print(data);
+  //print(data);
 }
 
 void newFormQuery(String title, String description, int category,
-    String dateTime, int userID) {
+    String strDateTime, int userID) {
+  DateTime dateTime = DateTime.parse(strDateTime);
+  dateTime = dateTime.subtract(Duration(microseconds: dateTime.microsecond));
   String query =
       "INSERT INTO task (title, ownerID, description, dateTime, completion, recurringID, categoryID) "
-      "VALUES ('$title', $userID, '$description', '$dateTime', false, 1, $category);";
-  print("newquery: $query");
+      "VALUES ('$title', $userID, '$description', '${dateTime.toUtc()}', false, 1, $category);";
+  //print("newquery: $query");
   justQuery(query);
 }
 
@@ -112,9 +112,9 @@ void updateFormQuery(String title, String description, int category,
       "title = '$title', "
       "description = '$description', "
       "categoryID = $category, "
-      "dateTime = '$dateTime' "
+      "dateTime = '${dateTime.toUtc()}' "
       "WHERE task.ID = $taskID;";
-  print("updatequery: $query");
+  //print("updatequery: $query");
   justQuery(query);
 }
 
@@ -218,9 +218,9 @@ Future<Results> performQueryOnMySQL(String query) async {
     if (conn == null) {
       print('ERROR - COULD NOT CONNECT TO DBMS');
     }
-    print("query: $query");
+    //print("query: $query");
     var results = await conn.query(query);
-    print("results: $results");
+    //print("results: $results");
     conn.close();
     return results;
   } catch (e) {

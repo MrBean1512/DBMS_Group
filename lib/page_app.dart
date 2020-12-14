@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'page_home.dart';
 import 'page_calendar.dart';
 import 'page_agenda.dart';
-import 'page_login.dart';
 import 'task_list.dart';
 
 class AppPage extends StatefulWidget {
@@ -50,26 +49,6 @@ class _AppPageState extends State<AppPage> {
     currentPage = home;
     super.initState();
   }
-  /*
-  int _counter = 0;
-  var db = new Mysql();
-  var mail = '';
-
-  void _getCustomer() {
-    print("button pressed");
-    db.getConnection().then((conn) {
-      String sql = 'select title from task_manager.task;';
-      conn.query(sql).then((results) {
-        for (var row in results) {
-          setState(() {
-            mail = row[0];
-          });
-        }
-      });
-      conn.close();
-    });
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +119,6 @@ class _AppPageState extends State<AppPage> {
         },
         backgroundColor: Colors.green,
       ),
-      /*
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getCustomer,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-      */
     );
   }
 }
