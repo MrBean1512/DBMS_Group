@@ -28,12 +28,21 @@ class Mysql {
 }
 
 // Pre-fill the form with some default values. This is only temporary for the sake of code demonstration
-Future<Map> getMapQuery([DateTime start, DateTime end]) async {
+Future<Map> getTasks([DateTime start, DateTime end]) async {
   print("getMapQuery");
   //Map data = await readData();
   //DateTime start = recStart;
   //DateTime end = recEnd;
-  String query = 'select * from task_manager.task where ownerID = 1';
+  String query =
+      "SELECT DISTINCT T.ID as ID, T.title as title, T.description as description, "
+      "T.dateTime as dateTime, T.completion as completion, C.name as category, "
+      "Color.A as colorA, Color.R as colorR, Color.G as colorG, Color.B as colorB, "
+      "T.ownerID as taskOwner, C.ownerID as categoryOwner "
+      "FROM task_manager.task T "
+      "inner join task_manager.category C ON T.categoryID = C.ID "
+      "inner join task_manager.color ON C.color = color.color "
+      "WHERE T.ownerID = 1 "
+      "ORDER BY T.dateTime;";
   if ((start != null && end != null) && (start.isBefore(end))) {
     start = start;
     start = start.subtract(Duration(hours: start.hour));
@@ -50,7 +59,17 @@ Future<Map> getMapQuery([DateTime start, DateTime end]) async {
     end = end.subtract(Duration(microseconds: end.microsecond));
 
     query =
-        "SELECT * FROM task_manager.task WHERE dateTime >= '$start' AND dateTime <= '$end' AND ownerID = 1;";
+        "SELECT DISTINCT T.ID as ID, T.title as title, T.description as description, "
+        "T.dateTime as dateTime, T.completion as completion, C.name as category, "
+        "Color.A as colorA, Color.R as colorR, Color.G as colorG, Color.B as colorB, "
+        "T.ownerID as taskOwner, C.ownerID as categoryOwner "
+        "FROM task_manager.task T "
+        "inner join task_manager.category C ON T.categoryID = C.ID "
+        "inner join task_manager.color ON C.color = color.color "
+        "WHERE T.dateTime >= '$start' "
+        "AND DATE(dateTime) <= '$end' "
+        "AND T.ownerID = 1 "
+        "ORDER BY T.dateTime;";
   }
 
   print("getquery: $query");
@@ -126,6 +145,15 @@ void updateFormQuery(String title, String description, int category,
   //print("updatequery: $query");
   justQuery(query);
   print(query);
+}
+
+Future<Map> getCategories(int user) async {
+  print("getCategories");
+  String query =
+      "SELECT Category.ID, Category.name, Category.color, Color.A, Color.R, Color.G, Color.B "
+      "FROM task_manager.Category inner join task_manager.Color ON Category.color = Color.color "
+      "WHERE Category.ownerID = $user; ";
+  return await getQuery(query);
 }
 
 Future<int> validateLogin(String username, String password) async {

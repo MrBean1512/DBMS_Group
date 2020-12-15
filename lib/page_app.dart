@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'page_home.dart';
 import 'page_calendar.dart';
 import 'page_agenda.dart';
+import 'forms.dart';
 import 'task_list.dart';
 
 class AppPage extends StatefulWidget {
@@ -87,6 +88,7 @@ class _AppPageState extends State<AppPage> {
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
+        backgroundColor: Color.fromARGB(255, 108, 95, 255),
       ),
       bottomNavigationBar: BottomNavigationBar(
         //navigation bar along the bottom of the app
@@ -109,7 +111,7 @@ class _AppPageState extends State<AppPage> {
           //),
         ],
         currentIndex: currentTab,
-        unselectedItemColor: Colors.green[950],
+        unselectedItemColor: Colors.grey[400],
         selectedItemColor: Colors.grey[200],
         onTap: (int index) {
           setState(() {
@@ -117,7 +119,7 @@ class _AppPageState extends State<AppPage> {
             currentPage = pages[index];
           });
         },
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 57, 55, 77),
       ),
     );
   }

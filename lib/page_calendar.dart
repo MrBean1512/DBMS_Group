@@ -16,7 +16,7 @@ class _PageCalendarState extends State<PageCalendar> {
 
   Future<Map> getEvents() async {
     //convert the map of tasks
-    Map tasks = await getMapQuery();
+    Map tasks = await getTasks();
     Map<DateTime, List> events = {};
     DateTime date;
     String event;
