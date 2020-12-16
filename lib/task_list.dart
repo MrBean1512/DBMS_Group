@@ -11,7 +11,7 @@ import "file_handling.dart";
 
 //builds a listView widget of tasks
 
-FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
+FutureBuilder buildTaskList(DateTime start, DateTime end, context,
     [String imageFile]) {
   //image is optional
   Map tasks;
@@ -56,8 +56,10 @@ FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
             return buildTaskBox(context, _formKey, tasks, tasks['title'][index - 1],
               tasks['description'][index - 1], tasks['dateTime'][index - 1]);
             */
-              return buildTaskBox(
-                  context, _formKey, projectSnap.data, index - 1);
+              return TaskBox(
+                  context: context,
+                  tasks: projectSnap.data,
+                  taskIndex: index - 1);
               //return statements return only to itemBuilder
             },
 
@@ -69,87 +71,205 @@ FutureBuilder buildTaskList(DateTime start, DateTime end, context, _formKey,
 
 //builds a taskBox container
 //intended to be used by buildTaskList()
-InkWell buildTaskBox(context, _formKey, Map tasks, int taskIndex) {
-  return (InkWell(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: Stack(
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    /*
-                    this was just an x button but clicking outside the screen is pretty intuitive
-                    Positioned(
-                      right: -40.0,
-                      top: -40.0,
-                      child: InkResponse(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          child: Icon(Icons.close),
-                          backgroundColor: Colors.red,
+class TaskBox extends StatefulWidget {
+  TaskBox({this.context, this.tasks, this.taskIndex});
+  final context;
+  final Map tasks;
+  final int taskIndex;
+
+  @override
+  TaskBoxState createState() {
+    return TaskBoxState();
+  }
+}
+
+// Create a corresponding State class.
+// This class holds data related to the form.
+class TaskBoxState extends State<TaskBox> {
+  var context;
+  var tasks;
+
+  //used for the check-box state
+  var complete = false;
+  var icon = Icons.circle;
+  Color iconColor = Colors.grey[300];
+  var buttonColor = (Colors.white);
+
+  //used to parse the time from dateTime
+  var ampm = "am";
+  String time;
+
+  @override
+  void initState() {
+    super.initState();
+    //initialize values
+    context = widget.context;
+    tasks = widget.tasks;
+
+    //parse the time string
+    if (tasks["dateTime"][widget.taskIndex].hour > 12) {
+      ampm = "pm";
+    }
+    if (tasks["dateTime"][widget.taskIndex].minute < 9) {
+      time = "${tasks["dateTime"][widget.taskIndex].hour % 12}:0${tasks["dateTime"][widget.taskIndex].minute} $ampm";
+    } else {
+      time = "${tasks["dateTime"][widget.taskIndex].hour % 12}:${tasks["dateTime"][widget.taskIndex].minute} $ampm";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (
+      InkWell(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        EditTaskForm(tasks, widget.taskIndex),
+                        Positioned(
+                          right: -40.0,
+                          bottom: -40.0,
+                          child: InkResponse(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: CircleAvatar(
+                              child: Icon(Icons.delete),
+                              backgroundColor: Colors.red[100],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    */
-                    EditTaskForm(tasks, taskIndex),
-                    Positioned(
-                      right: -40.0,
-                      bottom: -40.0,
-                      child: InkResponse(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          child: Icon(Icons.delete),
-                          backgroundColor: Colors.red[100],
-                        ),
-                      ),
-                    ),
-                  ],
+                  );
+                });
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            color: Color.fromARGB(
+                80,
+                tasks["colorR"][widget.taskIndex],
+                tasks["colorG"][widget.taskIndex],
+                tasks["colorB"][widget.taskIndex]),
+            child: Row(
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      if (!complete) {
+                        complete = true;
+                        icon = Icons.check_circle_outline;
+                        iconColor = (Colors.white);
+                        buttonColor = Color.fromARGB(255, 57, 55, 77);
+                      } else {
+                        complete = false;
+                        icon = Icons.circle;
+                        iconColor = Colors.grey[300];
+                        buttonColor = (Colors.white);
+                      }
+                      completeTask(
+                          complete, widget.tasks["ID"][widget.taskIndex]);
+                      print(complete);
+                    });
+                  },
+                  tooltip: 'Complete Task',
+                  child: Icon(
+                    icon,
+                    color: iconColor,
+                  ),
+                  backgroundColor: buttonColor,
                 ),
-              );
-            });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        color: Color.fromARGB(80, tasks["colorR"][taskIndex],
-            tasks["colorG"][taskIndex], tasks["colorB"][taskIndex]),
-        child: Row(
-          children: [
-            Icon(
-              //dart conveniently provides premade icons, this will be useful so
-              Icons.check_box,
-              color: Colors.white,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      //title, //this is where the title string is used
-                      tasks["title"][taskIndex],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                Container(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              //title, //this is where the title string is used
+                              tasks["title"][widget.taskIndex],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              //title, //this is where the title string is used
+                              time,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              //description, //this is where the description string is used
+                              tasks["description"][widget.taskIndex],
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              //title, //this is where the title string is used
+                              "${tasks["dateTime"][widget.taskIndex].month}/${tasks["dateTime"][widget.taskIndex].day}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                  Text(
-                    //description, //this is where the description string is used
-                    tasks["description"][taskIndex],
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      )));
+          )));
+  }
+}
+
+MaterialColor createMaterialColor(Color color) {
+  List strengths = <double>[.05];
+  Map swatch = <int, Color>{};
+  final int r = color.red, g = color.green, b = color.blue;
+
+  for (int i = 1; i < 10; i++) {
+    strengths.add(0.1 * i);
+  }
+  strengths.forEach((strength) {
+    final double ds = 0.5 - strength;
+    swatch[(strength * 1000).round()] = Color.fromRGBO(
+      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+      1,
+    );
+  });
+  return MaterialColor(color.value, swatch);
 }

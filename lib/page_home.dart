@@ -15,7 +15,7 @@ class _PageHomeState extends State<PageHome> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: buildTaskList(DateTime.now(), DateTime.now(), context, _formKey, 'assets/images/4x/home_tasksxxxhdpi.png'),
+      child: buildTaskList(DateTime.now(), DateTime.now(), context, 'assets/images/4x/home_tasksxxxhdpi.png'),
     );
   }
 }

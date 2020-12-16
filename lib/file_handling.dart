@@ -37,11 +37,12 @@ Future<Map> getTasks([DateTime start, DateTime end]) async {
       "SELECT DISTINCT T.ID as ID, T.title as title, T.description as description, "
       "T.dateTime as dateTime, T.completion as completion, C.name as category, "
       "Color.A as colorA, Color.R as colorR, Color.G as colorG, Color.B as colorB, "
-      "T.ownerID as taskOwner, C.ownerID as categoryOwner "
+      "T.ownerID as taskOwner, C.ownerID as categoryOwner, C.ID as categoryID "
       "FROM task_manager.task T "
       "inner join task_manager.category C ON T.categoryID = C.ID "
       "inner join task_manager.color ON C.color = color.color "
       "WHERE T.ownerID = 1 "
+      "AND T.completion = false "
       "ORDER BY T.dateTime;";
   if ((start != null && end != null) && (start.isBefore(end))) {
     start = start;
@@ -62,13 +63,14 @@ Future<Map> getTasks([DateTime start, DateTime end]) async {
         "SELECT DISTINCT T.ID as ID, T.title as title, T.description as description, "
         "T.dateTime as dateTime, T.completion as completion, C.name as category, "
         "Color.A as colorA, Color.R as colorR, Color.G as colorG, Color.B as colorB, "
-        "T.ownerID as taskOwner, C.ownerID as categoryOwner "
+        "T.ownerID as taskOwner, C.ownerID as categoryOwner, C.ID as categoryID "
         "FROM task_manager.task T "
         "inner join task_manager.category C ON T.categoryID = C.ID "
         "inner join task_manager.color ON C.color = color.color "
         "WHERE T.dateTime >= '$start' "
         "AND DATE(dateTime) <= '$end' "
         "AND T.ownerID = 1 "
+        "AND T.completion = false "
         "ORDER BY T.dateTime;";
   }
 
@@ -145,6 +147,14 @@ void updateFormQuery(String title, String description, int category,
   //print("updatequery: $query");
   justQuery(query);
   print(query);
+}
+
+void completeTask(bool value, int taskID) {
+  print("update complete bool");
+  String query = "UPDATE task_manager.task SET "
+      "completion = $value "
+      "WHERE task.ID = $taskID;";
+  justQuery(query);
 }
 
 Future<Map> getCategories(int user) async {

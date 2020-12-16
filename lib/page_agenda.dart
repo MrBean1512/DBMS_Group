@@ -12,14 +12,22 @@ class PageAgenda extends StatefulWidget {
 
 class _PageAgendaState extends State<PageAgenda> {
   final _formKey = GlobalKey<FormState>();
+  DateTime endDate;
+
+  @override
+  void initState() {
+    super.initState();
+    endDate = DateTime.now().add(Duration(days: 2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      Container(height: 16,),
       _buildButtons(),
       Expanded(
           // wrap in Expanded
-          child:
-              buildTaskList(DateTime.now(), DateTime.now(), context, _formKey)),
+          child: buildTaskList(DateTime.now(), endDate, context)),
     ]);
   }
 
@@ -29,21 +37,32 @@ class _PageAgendaState extends State<PageAgenda> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         RaisedButton(
+          color: Colors.white,
           child: Text('2 Days'),
           onPressed: () {
-            setState(() {});
+            setState(() {
+              endDate = DateTime.now().add(Duration(days: 2));
+            });
           },
         ),
+        Container(width: 16),
         RaisedButton(
+          color: Colors.white,
           child: Text('1 Week'),
           onPressed: () {
-            setState(() {});
+            setState(() {
+              endDate = DateTime.now().add(Duration(days: 7));
+            });
           },
         ),
+        Container(width: 16),
         RaisedButton(
+          color: Colors.white,
           child: Text('2 Weeks'),
           onPressed: () {
-            setState(() {});
+            setState(() {
+              endDate = DateTime.now().add(Duration(days: 14));
+            });
           },
         ),
       ],

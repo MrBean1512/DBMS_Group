@@ -26,7 +26,7 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   //simple stateful interactions are now handled within their respective widget
-
+  int setStateIncrement = 0;
   int currentTab = 0;
 
   PageHome home;
@@ -64,26 +64,27 @@ class _AppPageState extends State<AppPage> {
         // Here we take the value from the AppPage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        
         //title: Text('$mail')
       ),
       body: currentPage,
-      
+
       //call the current page to be displayed
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
             showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: Stack(
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    NewTaskForm(),
-                  ],
-                ),
-              );
-            });
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        NewTaskForm(),
+                      ],
+                    ),
+                  );
+                });
           });
         },
         tooltip: 'Increment',

@@ -74,25 +74,22 @@ class NewTaskFormState extends State<NewTaskForm> {
           Row(
             children: [
               FutureBuilder(
-                future: getCategories(1),
-                builder: (context, projectSnap) {
-                  if (!projectSnap.hasData) {
-                    print("not showing categories");
-                    return Container();
-                  } else {
-                  if (dropdownValue == null) {
-                    dropdownValue = projectSnap.data["ID"][0].toString();
-                  }
-                  return (
-                      DropdownButton<String>(
+                  future: getCategories(1),
+                  builder: (context, projectSnap) {
+                    if (!projectSnap.hasData) {
+                      print("not showing categories");
+                      return Container();
+                    } else {
+                      if (dropdownValue == null) {
+                        dropdownValue = projectSnap.data["ID"][0].toString();
+                      }
+                      return (DropdownButton<String>(
                           value: dropdownValue,
                           icon: Icon(Icons.arrow_drop_down),
                           iconSize: 24,
                           elevation: 16,
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 16
-                          ),
+                          style:
+                              TextStyle(color: Colors.grey[700], fontSize: 16),
                           underline: Container(
                             height: 2,
                             color: Colors.grey[400],
@@ -104,12 +101,10 @@ class NewTaskFormState extends State<NewTaskForm> {
                               print("category selected: $dropdownValue");
                             });
                           },
-                          items: listToDropMenu(projectSnap.data)
-                        )
-                  
-                  );
-                }}
-            )],
+                          items: listToDropMenu(projectSnap.data)));
+                    }
+                  })
+            ],
           ),
           DateTimeField(
             //The code in the DateTimeField() was coppied from the
@@ -156,7 +151,7 @@ class NewTaskFormState extends State<NewTaskForm> {
                   newFormQuery(
                       _titleTextController.text,
                       _descriptionTextController.text,
-                      1, //int.parse(dropdownValue),
+                      int.parse(dropdownValue),
                       _dateTimeController.text,
                       1);
                   Navigator.pop(context);
@@ -195,6 +190,18 @@ class EditTaskFormState extends State<EditTaskForm> {
   final _titleTextController = TextEditingController();
   final _descriptionTextController = TextEditingController();
   final _dateTimeController = TextEditingController();
+  String dropdownValue;
+
+  List<DropdownMenuItem<String>> listToDropMenu(Map categoryNames) {
+    List<DropdownMenuItem<String>> menu = [];
+    for (int i = 0; i < categoryNames["name"].length; i++) {
+      menu.add(DropdownMenuItem<String>(
+        value: categoryNames["ID"][i].toString(),
+        child: Text(categoryNames["name"][i]),
+      ));
+    }
+    return menu;
+  }
 
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -202,6 +209,13 @@ class EditTaskFormState extends State<EditTaskForm> {
     _descriptionTextController.dispose();
     _dateTimeController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.tasks["categoryID"][widget.index].toString();
+    print("initializing state");
   }
 
   @override
@@ -230,6 +244,41 @@ class EditTaskFormState extends State<EditTaskForm> {
             //initialValue: widget.tasks["description"][widget.index],
             controller: _descriptionTextController
               ..text = widget.tasks["description"][widget.index],
+          ),
+          Row(
+            children: [
+              FutureBuilder(
+                  future: getCategories(1),
+                  builder: (context, projectSnap) {
+                    if (!projectSnap.hasData) {
+                      print("not showing categories");
+                      return Container();
+                    } else {
+                      if (dropdownValue == null) {
+                        //dropdownValue =
+                        //   widget.tasks["categoryID"][widget.index].toString();
+                      }
+                      return (DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style:
+                              TextStyle(color: Colors.grey[700], fontSize: 16),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.grey[400],
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                              print("category selected: $dropdownValue");
+                            });
+                          },
+                          items: listToDropMenu(projectSnap.data)));
+                    }
+                  })
+            ],
           ),
           DateTimeField(
             //The code in the DateTimeField() was coppied from the
@@ -275,14 +324,15 @@ class EditTaskFormState extends State<EditTaskForm> {
                   print("title: ${_titleTextController.text}");
                   print("description: ${_descriptionTextController.text}");
                   print("dateTime: ${_dateTimeController.text}");
-
-                  updateFormQuery(
-                      _titleTextController.text,
-                      _descriptionTextController.text,
-                      1,
-                      _dateTimeController.text,
-                      widget.tasks["ID"][widget.index]);
-                  Navigator.pop(context);
+                  setState(() {
+                    updateFormQuery(
+                        _titleTextController.text,
+                        _descriptionTextController.text,
+                        int.parse(dropdownValue),
+                        _dateTimeController.text,
+                        widget.tasks["ID"][widget.index]);
+                    Navigator.pop(context);
+                  });
                 }
               },
               child: Text('Submit Changes'),
@@ -323,44 +373,38 @@ class CategorySelectorFieldState extends State<CategorySelectorField> {
   @override
   Widget build(BuildContext context) {
     return (Row(
-              children: [
-      FutureBuilder(
-        future: getCategories(1),
-        builder: (context, projectSnap) {
-          if (!projectSnap.hasData) {
-            print("not showing categories");
-            return Container();
-          } else {
-          if (dropdownValue == null) {
-            dropdownValue = projectSnap.data["name"][0];
-          }
-          return (
-              DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 16
-                  ),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.grey[400],
-                  ),
-                  onChanged: (String newValue) {
-                    setState(() {
-                      print("category selected: $newValue");
-                      dropdownValue = newValue;
-                      print("category selected: $dropdownValue");
-                    });
-                  },
-                  items: listToDropMenu(projectSnap.data["name"])
-                )
-          
-          );
-        }}
-      )],
+      children: [
+        FutureBuilder(
+            future: getCategories(1),
+            builder: (context, projectSnap) {
+              if (!projectSnap.hasData) {
+                print("not showing categories");
+                return Container();
+              } else {
+                if (dropdownValue == null) {
+                  dropdownValue = projectSnap.data["name"][0];
+                }
+                return (DropdownButton<String>(
+                    value: dropdownValue,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.grey[400],
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        print("category selected: $newValue");
+                        dropdownValue = newValue;
+                        print("category selected: $dropdownValue");
+                      });
+                    },
+                    items: listToDropMenu(projectSnap.data["name"])));
+              }
+            })
+      ],
     ));
   }
 }
