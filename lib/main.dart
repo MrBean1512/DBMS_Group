@@ -6,21 +6,41 @@ login authentication first via page_login.
 For some more details about the nature of widgets, look at page_app.dart
 */
 
+import 'package:splashscreen/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'page_login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'task_list.dart';
 
 void main() {
-  //populateJson();
-  //getQuery('select * from task_manager.task;');
   initializeDateFormatting().then((_) => runApp(MaterialApp(
-        home: App(), //create an instance of the menu
+  //dateFormatting is used for the calendar page
+  //and must be initialized before running the app
+        home: App(), //create an instance of the application
       )));
 }
 
 class App extends StatelessWidget {
   // This widget is the root of your application.
+    @override
+  Widget build(BuildContext context) {
+    return new SplashScreen(
+      seconds: 5,
+      navigateAfterSeconds: new AfterSplash(),
+      title: new Text(
+        'Task Manager',
+        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+      ),
+      image: Image.asset(
+          'assets/images/4x/splashscreen.png'),
+      backgroundColor: Colors.white,
+      loaderColor: Colors.red,
+    );
+  }
+}
+
+class AfterSplash extends StatelessWidget {
+   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +58,6 @@ class App extends StatelessWidget {
         primarySwatch: createMaterialColor(Color.fromARGB(255, 57, 55, 77)),
         buttonColor: createMaterialColor(Color.fromARGB(255, 108, 95, 255)),
       ),
-      //home: AppPage(title: 'Task Manager'),
       home: PageLogin(title: 'Task Manager'),
     );
   }

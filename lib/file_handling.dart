@@ -1,13 +1,11 @@
-//import 'package:flutter/material.dart';
-//import 'package:flutter/foundation.dart';
+//All functions in this file are related to querying the dbms or local storage
+
 import 'package:path_provider/path_provider.dart';
 
 import 'dart:core';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-
-//'select title from task_manager.task;'
 
 import 'package:mysql1/mysql1.dart';
 
@@ -193,58 +191,6 @@ Map getMapFromJsonCal() {
 }
 
 /////////////////////////////////////////////////////////////////////////
-//The following section contains file io related functions
-/////////////////////////////////////////////////////////////////////////
-//*important*
-//methods in this section are not necessary for handling tasks in the
-//application, avoid these if possible and dynamically update application
-//directly with the dbms, this should only be used to store cookies
-//and possibly custom settings as the app continues to develop
-
-///write dbms data into json file
-///note this does not currently function properly
-populateJson([DateTime start, DateTime end]) {
-  String query = 'select * from task_manager.task;';
-  writeData(getQuery(query));
-}
-
-///get the local file path
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-
-  return directory.path;
-}
-
-///get the local file
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/data.json');
-}
-
-///write data into the file
-Future<File> writeData(Future<Map> data) async {
-  final file = await _localFile;
-
-  // Write the file.
-  return file.writeAsString(jsonEncode(data));
-}
-
-///read data from the file
-Future<Map> readData() async {
-  try {
-    final file = await _localFile;
-
-    // Read the file.
-    String contents = await file.readAsString();
-    Map data = json.decode(contents);
-    return (data);
-  } catch (e) {
-    // If encountering an error, return 0.
-    return null;
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////
 ///The following section contains SQL related functions
 /////////////////////////////////////////////////////////////////////////
 
@@ -297,4 +243,56 @@ Future<Map> getQuery(String query) async {
   //  print(row.values);
   //}
   return (tasks);
+}
+
+/////////////////////////////////////////////////////////////////////////
+//The following section contains file io related functions
+/////////////////////////////////////////////////////////////////////////
+//*important*
+//methods in this section are not used for handling tasks in the
+//application, avoid these if possible and dynamically update application
+//directly with the dbms, this should only be used to store cookies
+//and possibly custom settings as the app continues to develop
+
+///write dbms data into json file
+///note this does not currently function properly
+populateJson([DateTime start, DateTime end]) {
+  String query = 'select * from task_manager.task;';
+  writeData(getQuery(query));
+}
+
+///get the local file path
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+///get the local file
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/data.json');
+}
+
+///write data into the file
+Future<File> writeData(Future<Map> data) async {
+  final file = await _localFile;
+
+  // Write the file.
+  return file.writeAsString(jsonEncode(data));
+}
+
+///read data from the file
+Future<Map> readData() async {
+  try {
+    final file = await _localFile;
+
+    // Read the file.
+    String contents = await file.readAsString();
+    Map data = json.decode(contents);
+    return (data);
+  } catch (e) {
+    // If encountering an error, return 0.
+    return null;
+  }
 }

@@ -64,7 +64,7 @@ class _AppPageState extends State<AppPage> {
         // Here we take the value from the AppPage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
-        
+
         //title: Text('$mail')
       ),
       body: currentPage,
