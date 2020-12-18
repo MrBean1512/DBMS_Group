@@ -4,7 +4,12 @@ Initializes app.
 The page_app acts as the main scaffold for the whole app but the user must pass
 login authentication first via page_login.
 For some more details about the nature of widgets, look at page_app.dart
+
+Sources:
+The splashscreen package can be found here:
+https://pub.dev/packages/splashscreen
 */
+
 
 import 'package:splashscreen/splashscreen.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +26,12 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  // This widget is the root of your application.
+    // This widget is the root of the application.
     @override
   Widget build(BuildContext context) {
+    //show a splashscreen before running the app
     return new SplashScreen(
-      seconds: 5,
+      seconds: 3,
       navigateAfterSeconds: new AfterSplash(),
       title: new Text(
         'Task Manager',
@@ -33,27 +39,29 @@ class App extends StatelessWidget {
       ),
       image: Image.asset(
           'assets/images/4x/splashscreen.png'),
+      photoSize: 50,
       backgroundColor: Colors.white,
-      loaderColor: Colors.red,
+      loaderColor: Colors.blue,
     );
   }
 }
 
+//called after the splashscreen is shown
 class AfterSplash extends StatelessWidget {
-   // This widget is the root of your application.
+   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Task Manager',
       theme: ThemeData(
-        // This is the theme of your application.
+        // This is the theme of the application.
         //
         // Try running the application with "flutter run". You'll see the
         // application has a blue toolbar. Then, without quitting the app, try
         // changing the primarySwatch below to Colors.green and then invoke
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
+        // Notice that the page didn't reset; the application
         // is not restarted.
         primarySwatch: createMaterialColor(Color.fromARGB(255, 57, 55, 77)),
         buttonColor: createMaterialColor(Color.fromARGB(255, 108, 95, 255)),
@@ -62,30 +70,3 @@ class AfterSplash extends StatelessWidget {
     );
   }
 }
-
-/*
-TODO
-this will likely be a useful resource: https://dart.dev/tutorials/web/fetch-data
-deal with utc stuff
-share categories
-  search users and send invite
-    invite by chooseing category
-  accept or deny invites
-tasks forms
-  choose category
-    choose color
-    choose category
-      add new category
-  make all tasks show due date and time
-page today
-  add "today" header
-page calendar
-  show task due time
-  optionally add editing features to it
-  optionally remove viewing options and insert calendar into list widget
-page agenda
-  add '2 days' view button
-  add '1 week' view button
-  add 'category' view button
-    optionally use '2 week' view button if time doesn't permit this
-*/

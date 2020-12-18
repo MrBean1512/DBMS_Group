@@ -67,9 +67,13 @@ class _AppPageState extends State<AppPage> {
 
         //title: Text('$mail')
       ),
-      body: currentPage,
 
       //call the current page to be displayed
+      body: currentPage,
+
+      //create a floating action button that users may press in order to
+      //fill out the new task form
+      //this is the reason each page has the same button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -91,6 +95,8 @@ class _AppPageState extends State<AppPage> {
         child: Icon(Icons.add),
         backgroundColor: Color.fromARGB(255, 108, 95, 255),
       ),
+
+      //build the navigation bar on the bottom of the screen
       bottomNavigationBar: BottomNavigationBar(
         //navigation bar along the bottom of the app
         items: const <BottomNavigationBarItem>[
@@ -106,11 +112,9 @@ class _AppPageState extends State<AppPage> {
             icon: Icon(Icons.list),
             label: 'Agenda',
           ),
-          //BottomNavigationBarItem(
-          //  icon: Icon(Icons.login),
-          //  label: 'Login',
-          //),
         ],
+
+        //other fields for controlling the app's structure
         currentIndex: currentTab,
         unselectedItemColor: Colors.grey[400],
         selectedItemColor: Colors.grey[200],

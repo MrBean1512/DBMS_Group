@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'file_handling.dart';
+import 'sql.dart';
 
+
+//Create the calendar page of the app
 class PageCalendar extends StatefulWidget {
   PageCalendar({Key key, this.title}) : super(key: key);
 
@@ -14,13 +16,17 @@ class PageCalendar extends StatefulWidget {
 
 class _PageCalendarState extends State<PageCalendar> {
 
+  //this function gets the task map from sql and then parses it out to be read by the calendar widget
   Future<Map> getEvents() async {
     //convert the map of tasks
     Map tasks = await getTasks();
     Map<DateTime, List> events = {};
     DateTime date;
     String event;
+
+    //for each task...
     for (var x = 0; x < tasks['dateTime'].length; x++) {
+      //parse the date to ignore the time
       date = tasks['dateTime'][x];
       date = date.subtract(Duration(hours: date.hour));
       date = date.subtract(Duration(minutes: date.minute));
@@ -28,26 +34,26 @@ class _PageCalendarState extends State<PageCalendar> {
       date = date.subtract(Duration(milliseconds: date.millisecond));
       date = date.subtract(Duration(microseconds: date.microsecond));
       
+      //put each task into a new map organized by dateTime rather than by task
       event = tasks['title'][x];
       if (events[date] == null) {
         events[date] = [event];
       } else {
         events[date].add(event);
       }
-      //_events[DateTime.parse(tasks['dateTime'][x])] = [tasks['dateTime'][x]];
-      //consider having the loop iterate through tasks instead
     }
     print("events: $events");
     return events;
   }
 
+  //build the page
   @override
   Widget build(BuildContext context) {
     return
-        // Displays the score information
-        //https://stackoverflow.com/questions/53800662/how-do-i-call-async-property-in-widget-build-method
-        //https://stackoverflow.com/questions/52801201/flutter-renderbox-was-not-laid-out for using Expanded with ListView
         Center(
+            //the calendar page must be built asyncronously from its start because
+            //of how the package works. Future implementation would ideally modify
+            //the package to include dynamically updated tasks
             child: FutureBuilder<Map>(
                 future: getEvents(),
                 builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
@@ -62,7 +68,7 @@ class _PageCalendarState extends State<PageCalendar> {
   }
 }
 
-// Example holidays
+// make some holidays
 final Map<DateTime, List> _holidays = {
   DateTime(2020, 1, 1): ['New Year\'s Day'],
   DateTime(2020, 1, 6): ['Epiphany'],
@@ -76,7 +82,7 @@ final Map<DateTime, List> _holidays = {
 //  Licensed under Apache License v2.0
 //Much of the code in the calendar class is not my own and was copied directly from the
 //calendar package creator here: https://pub.dev/packages/table_calendar/example
-//there are many modifications throughout the code though
+//however, there are many modifications throughout the code
 
 class Calendar extends StatefulWidget {
   Calendar({Key key, this.title, this.events}) : super(key: key);
@@ -89,7 +95,6 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
-  //Map<DateTime, List> _events;
   var _events;
   List _selectedEvents;
   AnimationController _animationController;
@@ -186,6 +191,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     );
   }
 
+
+  //build buttons to change calendar views
   Widget _buildButtons() {
     final dateTime = _events.keys.elementAt(_events.length - 2);
 
@@ -202,6 +209,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   _calendarController.setCalendarFormat(CalendarFormat.month);
                 });
               },
+              color: Colors.white,
             ),
             RaisedButton(
               child: Text('2 weeks'),
@@ -211,6 +219,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                       .setCalendarFormat(CalendarFormat.twoWeeks);
                 });
               },
+              color: Colors.white,
             ),
             RaisedButton(
               child: Text('Week'),
@@ -219,25 +228,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   _calendarController.setCalendarFormat(CalendarFormat.week);
                 });
               },
+              color: Colors.white,
             ),
           ],
-        ), /*
-        const SizedBox(height: 8.0),
-        RaisedButton(
-          child: Text(
-              'Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
-          onPressed: () {
-            _calendarController.setSelectedDay(
-              DateTime(dateTime.year, dateTime.month, dateTime.day),
-              runCallback: true,
-            );
-          },
         ),
-        */
       ],
     );
   }
 
+  //show tasks at the bottom of the calendar for the respective day
   Widget _buildEventList() {
     return ListView(
       children: _selectedEvents

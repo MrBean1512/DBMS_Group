@@ -20,6 +20,7 @@ class _PageAgendaState extends State<PageAgenda> {
     endDate = DateTime.now().add(Duration(days: 2));
   }
 
+  //build the main layout of the page
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -27,10 +28,12 @@ class _PageAgendaState extends State<PageAgenda> {
       _buildButtons(),
       Expanded(
           // wrap in Expanded
+          // build the task list for the page
           child: buildTaskList(DateTime.now(), endDate, context)),
     ]);
   }
 
+  //build the buttons at the top of the page which control the date range fields
   Widget _buildButtons() {
     return Row(
       mainAxisSize: MainAxisSize.min,

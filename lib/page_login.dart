@@ -8,9 +8,11 @@ only that user.
 
 import 'package:flutter/material.dart';
 
-import 'file_handling.dart';
+import 'sql.dart';
 import 'page_app.dart';
 
+
+//create the login page's class
 class PageLogin extends StatefulWidget {
   PageLogin({Key key, this.title}) : super(key: key);
 
@@ -40,12 +42,14 @@ class _PageLoginState extends State<PageLogin> {
       content: Stack(
         overflow: Overflow.visible,
         children: <Widget>[
-          //LoginForm(),
+          //show the login form
           Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+
+                //build widget where the user enters their username
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Username'),
                   controller: _usernameTextController,
@@ -56,6 +60,8 @@ class _PageLoginState extends State<PageLogin> {
                     return null;
                   },
                 ),
+
+                //build widget where the user enters their password
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
                   controller: _passwordTextController,
@@ -66,6 +72,8 @@ class _PageLoginState extends State<PageLogin> {
                     return null;
                   },
                 ),
+
+                //build submit button
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
@@ -77,16 +85,16 @@ class _PageLoginState extends State<PageLogin> {
                         //print();
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Processing Data')));
+                        //submit the form to the dbms for validation
                         validateLogin(_usernameTextController.text,
                             _passwordTextController.text);
-                        //if(validateLogin(_usernameTextController.text, _passwordTextController.text) <= 0) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                          //move onto the next page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (context) =>
                                   AppPage(title: widget.title)),
                         );
-                        //}
                       }
                     },
                     child: Text('Submit'),

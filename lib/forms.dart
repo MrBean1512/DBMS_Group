@@ -1,8 +1,14 @@
 //////////////////////////////////////////////////////////////////////////
 //The following section contains form builders
 //////////////////////////////////////////////////////////////////////////
+//The forms are used to create new tasks and edit existing ones.
+
+//sources:
+//used thdatetime_picker package to help handle date/time selections
+//https://pub.dev/packages/datetime_picker_formfield
+
 import 'package:flutter/material.dart';
-import 'file_handling.dart';
+import 'sql.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +35,7 @@ class NewTaskFormState extends State<NewTaskForm> {
   final _dateTimeController = TextEditingController();
   String dropdownValue;
 
+  //create a dropdown list for selecting a category in the form
   List<DropdownMenuItem<String>> listToDropMenu(Map categoryNames) {
     List<DropdownMenuItem<String>> menu = [];
     for (int i = 0; i < categoryNames["name"].length; i++) {
@@ -56,6 +63,8 @@ class NewTaskFormState extends State<NewTaskForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+
+          //Textfield for inputing a title
           TextFormField(
             decoration: InputDecoration(labelText: 'Enter a title'),
             controller: _titleTextController,
@@ -66,23 +75,34 @@ class NewTaskFormState extends State<NewTaskForm> {
               return null;
             },
           ),
+
+          //Textfield for inputing a description
           TextFormField(
             decoration: InputDecoration(labelText: 'Enter a description'),
             controller: _descriptionTextController,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter a description';
+              }
+              return null;
+            },
           ),
-          //CategorySelectorField(categoryID: 1),
+
+          //Category Selector Field 
           Row(
             children: [
-              FutureBuilder(
+              FutureBuilder(  //categories are dynamically loaded from the dbms
                   future: getCategories(1),
                   builder: (context, projectSnap) {
+                    //if no data is returned then don't show field
                     if (!projectSnap.hasData) {
                       print("not showing categories");
                       return Container();
-                    } else {
+                    } else { //if data is returned...
                       if (dropdownValue == null) {
                         dropdownValue = projectSnap.data["ID"][0].toString();
                       }
+                      //display a dropdown
                       return (DropdownButton<String>(
                           value: dropdownValue,
                           icon: Icon(Icons.arrow_drop_down),
@@ -106,6 +126,9 @@ class NewTaskFormState extends State<NewTaskForm> {
                   })
             ],
           ),
+
+          //datetime selector form field
+          //shows the calendar picker and the clock time picker
           DateTimeField(
             //The code in the DateTimeField() was coppied from the
             //datetime_picker_form package'spage mentioned in the sources at the
@@ -133,7 +156,15 @@ class NewTaskFormState extends State<NewTaskForm> {
                 return currentValue;
               }
             },
+            validator: (value) {
+              if (value == null) {
+                return 'Please enter a time';
+              }
+              return null;
+            },
           ),
+
+          //submit button
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
@@ -211,6 +242,9 @@ class EditTaskFormState extends State<EditTaskForm> {
     super.dispose();
   }
 
+  //this initstate field is the reason edit task is largely the same as the new task
+  //I dislike douplicate code but it was necessary for the initstate function
+  //both look the same but behave very differently
   @override
   void initState() {
     super.initState();
@@ -226,9 +260,11 @@ class EditTaskFormState extends State<EditTaskForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+
+          //Textfield for inputing a title
           TextFormField(
             decoration: InputDecoration(labelText: 'Title'),
-            //initialValue: widget.tasks["title"][widget.index],
+            //initialValue
             controller: _titleTextController
               ..text = widget.tasks["title"][widget.index],
             //controller must be null if an initialValue is specified
@@ -239,21 +275,35 @@ class EditTaskFormState extends State<EditTaskForm> {
               return null;
             },
           ),
+
+          //Textfield for inputing a description
           TextFormField(
             decoration: InputDecoration(labelText: 'Description'),
-            //initialValue: widget.tasks["description"][widget.index],
+            //initialValue
             controller: _descriptionTextController
               ..text = widget.tasks["description"][widget.index],
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter a description';
+              }
+              return null;
+            },
           ),
+
+          //Category selector field 
           Row(
             children: [
               FutureBuilder(
                   future: getCategories(1),
                   builder: (context, projectSnap) {
+                    // Validate returns true if the form is valid, or false
+                    // otherwise.
                     if (!projectSnap.hasData) {
                       print("not showing categories");
                       return Container();
                     } else {
+                      // If the form is valid, display a Snackbar.
+                      //print();
                       if (dropdownValue == null) {
                         //dropdownValue =
                         //   widget.tasks["categoryID"][widget.index].toString();
@@ -280,6 +330,9 @@ class EditTaskFormState extends State<EditTaskForm> {
                   })
             ],
           ),
+
+          //Datetime selector fields
+          //shows the calendar picker and the clock time picker
           DateTimeField(
             //The code in the DateTimeField() was coppied from the
             //datetime_picker_form package'spage mentioned in the sources at the
@@ -309,7 +362,15 @@ class EditTaskFormState extends State<EditTaskForm> {
                 return currentValue;
               }
             },
+            validator: (value) {
+              if (value == null) {
+                return 'Please enter a title';
+              }
+              return null;
+            },
           ),
+
+          //submit button
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
