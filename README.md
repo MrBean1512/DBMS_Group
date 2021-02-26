@@ -59,36 +59,43 @@ This project was created as the final project of our databases management class 
 *the screenshots don't look pretty here
 
 login
+
 v
 
 ![mobile_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_1.PNG)
 
 home page: just shows today's tasks
+
 v
 
 ![mobile_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_2.PNG)
 
 ui to create a new task
+
 v
 
 ![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
 
 ui for selecting a date
+
 v
 
 ![mobile_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_4.PNG)
 
 ui for selecting a time
+
 v
 
 ![mobile_5](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_5.PNG)
 
 checking a box
+
 v
 
 ![mobile_6](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_6.PNG)
 
 changing the view to see all the tasks for the next 2 weeks
+
 v
 
 ![mobile_7](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_7.PNG)
@@ -96,26 +103,31 @@ v
 the calendar view for seeing upcoming tasks
 the dots represent the number of tasks in a day
 the faded number is the current date
+
 v
 
 ![mobile_9](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_9.PNG)
 
 web view for today's tasks
+
 v
 
 ![web_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_1.PNG)
 
 web view of a calendar with upcoming tasks
+
 v
 
 ![web_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_2.PNG)
 
 web view of alternative time windows
+
 v
 
 ![web_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_3.PNG)
 
 web pop up window of sharing a task with another user
+
 v
 
 ![web_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_4.PNG)
