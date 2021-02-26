@@ -2,7 +2,7 @@
 
 Rough documentation of project
 
-## TaskManageWebsiteservice
+## TaskManageWebsiteService
 
 This is not the final version of the file but it has been placed in this directory for rough references
 follow this link to the actual repository for more:
