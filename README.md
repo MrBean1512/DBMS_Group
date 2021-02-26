@@ -11,7 +11,7 @@ This project is designed to create a way for users to create, organize, and trac
 https://github.com/AOKins/TaskManageWebsiteService
 
 ## Functions
-* scroll to the bottom of this document to see screenshots
+*scroll to the bottom of this document to see screenshots
 - User Interfaces as a Mobile App & a Web App
   - Create Tasks & Edit Tasks
     - Enter or change the name of the task
