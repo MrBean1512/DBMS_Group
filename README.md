@@ -15,7 +15,7 @@ https://github.com/AOKins/TaskManageWebsiteService
 
 - User Interfaces as a Mobile App & a Web App
   - Create Tasks & Edit Tasks
-![alt text](https://github.com/mrbean1512/DBMS_Group/docs/dbms_readme/mobile_1.PNG)
+![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
     - Enter or change the name of the task
     - Enter or change the description of the task
     - Enter or change the date and time that the task is due
