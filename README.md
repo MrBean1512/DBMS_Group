@@ -15,7 +15,6 @@ https://github.com/AOKins/TaskManageWebsiteService
 
 - User Interfaces as a Mobile App & a Web App
   - Create Tasks & Edit Tasks
-![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
     - Enter or change the name of the task
     - Enter or change the description of the task
     - Enter or change the date and time that the task is due
@@ -24,6 +23,21 @@ https://github.com/AOKins/TaskManageWebsiteService
     - Search for other users and share tasks with them based on category
   - Complete Tasks
     - Marking a task as complete removes it from the user's view but keeps it in the dbms for possibly useful data
+
+## Screenshots
+![mobile_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_1.PNG)
+![mobile_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_2.PNG)
+![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
+![mobile_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_4.PNG)
+![mobile_5](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_5.PNG)
+![mobile_6](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_6.PNG)
+![mobile_7](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_7.PNG)
+![mobile_8](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_8.PNG)
+![mobile_9](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_9.PNG)
+![web_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_1.PNG)
+![web_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_2.PNG)
+![web_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_3.PNG)
+![web_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_4.PNG)
 
 ## Specification Overview
 
