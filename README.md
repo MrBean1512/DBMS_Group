@@ -8,11 +8,10 @@ By David Martin and Andrew O'Kins
 This project is designed to create a way for users to create, organize, and track tasks such as chores or errands. This was created in about 3 weeks as the final project for our database management class.
 
 ## Link to Web Application repository
-
 https://github.com/AOKins/TaskManageWebsiteService
 
 ## Functions
-
+* scroll to the bottom of this document to see screenshots
 - User Interfaces as a Mobile App & a Web App
   - Create Tasks & Edit Tasks
     - Enter or change the name of the task
@@ -23,21 +22,6 @@ https://github.com/AOKins/TaskManageWebsiteService
     - Search for other users and share tasks with them based on category
   - Complete Tasks
     - Marking a task as complete removes it from the user's view but keeps it in the dbms for possibly useful data
-
-## Screenshots
-![mobile_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_1.PNG)
-![mobile_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_2.PNG)
-![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
-![mobile_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_4.PNG)
-![mobile_5](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_5.PNG)
-![mobile_6](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_6.PNG)
-![mobile_7](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_7.PNG)
-![mobile_8](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_8.PNG)
-![mobile_9](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_9.PNG)
-![web_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_1.PNG)
-![web_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_2.PNG)
-![web_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_3.PNG)
-![web_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_4.PNG)
 
 ## Specification Overview
 
@@ -63,6 +47,46 @@ https://github.com/AOKins/TaskManageWebsiteService
     - Currently, data security for the mobile app is bad because it connects directly to the DBMS. This was originally supposed to be done via Php but we simply lacked the time to implement this. This currently is largest oversight of the project and will be the highest priority if development is continued.
   - Add some more data fields to improve usefulness of data
 
-### Background
+## Background
 
 This project was created as the final project of our databases management class at Whitworth University. The project requirements were open ended; we were simply told to create some software that interacted with a DBMS. We decided to build a web interface and a mobile application that each were capable of interacting with one dbms via MySql. We used dart/flutter as the dominant language and teased some HTML and Javascript for a couple of technical solutions. The biggest difficulties were primarily caused by the small three week window that we had to create all of this. As a result, we were unable to implement all of the desired features of the app but we were able to successfully run the entire process and set up the critical foundation to expand in the future.
+
+## Screenshots
+
+login
+![mobile_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_1.PNG)
+
+home page: just shows today's tasks
+![mobile_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_2.PNG)
+
+ui to create a new task
+![mobile_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_3.PNG)
+
+ui for selecting a date
+![mobile_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_4.PNG)
+
+ui for selecting a time
+![mobile_5](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_5.PNG)
+
+checking a box
+![mobile_6](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_6.PNG)
+
+changing the view to see all the tasks for the next 2 weeks
+![mobile_7](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_7.PNG)
+
+the calendar view for seeing upcoming tasks
+the dots represent the number of tasks in a day
+the faded number is the current date
+![mobile_9](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_9.PNG)
+
+web view for today's tasks
+![web_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_1.PNG)
+
+web view of a calendar with upcoming tasks
+![web_2](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_2.PNG)
+
+web view of alternative time windows
+![web_3](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_3.PNG)
+
+web pop up window of sharing a task with another user
+![web_4](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/web_4.PNG)
