@@ -56,8 +56,6 @@ This project was created as the final project of our databases management class 
 
 ## Screenshots
 
-*the screenshots don't look pretty here
-
 login
 
 v
