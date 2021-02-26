@@ -10,6 +10,7 @@ This project is designed to create a way for users to create, organize, and trac
 ## Link to Web Application repository
 https://github.com/AOKins/TaskManageWebsiteService
 
+
 ## Functions
 *scroll to the bottom of this document to see screenshots
 - User Interfaces as a Mobile App & a Web App
@@ -24,7 +25,6 @@ https://github.com/AOKins/TaskManageWebsiteService
     - Marking a task as complete removes it from the user's view but keeps it in the dbms for possibly useful data
 
 ## Specification Overview
-
 - Mobile Application
   - Dart & Flutter
   - Designed for Google Pixel 3 (but it should be compatible with most android phones)
@@ -36,7 +36,6 @@ https://github.com/AOKins/TaskManageWebsiteService
   - All UIs interact with this
 
 ## Work Needed
-
 - Mobile Application
   - Allow users to share content
   - Allow users to create new categories
@@ -48,11 +47,9 @@ https://github.com/AOKins/TaskManageWebsiteService
   - Add some more data fields to improve usefulness of data
 
 ## Background
-
 This project was created as the final project of our databases management class at Whitworth University. The project requirements were open ended; we were simply told to create some software that interacted with a DBMS. We decided to build a web interface and a mobile application that each were capable of interacting with one dbms via MySql. We used dart/flutter as the dominant language and teased some HTML and Javascript for a couple of technical solutions. The biggest difficulties were primarily caused by the small three week window that we had to create all of this. As a result, we were unable to implement all of the desired features of the app but we were able to successfully run the entire process and set up the critical foundation to expand in the future.
 
 ## Screenshots
-
 login
 ![mobile_1](https://github.com/MrBean1512/DBMS_Group/blob/main/docs/dbms_readme/mobile_1.PNG)
 
