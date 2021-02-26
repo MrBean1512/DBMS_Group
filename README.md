@@ -11,7 +11,7 @@ This project is designed to create a way for users to create, organize, and trac
 
 https://github.com/AOKins/TaskManageWebsiteService
 
-### Functions
+## Functions
 
 - User Interfaces as a Mobile App & a Web App
   - Create Tasks & Edit Tasks
@@ -24,7 +24,7 @@ https://github.com/AOKins/TaskManageWebsiteService
   - Complete Tasks
     - Marking a task as complete removes it from the user's view but keeps it in the dbms for possibly useful data
 
-### Specification Overview
+## Specification Overview
 
 - Mobile Application
   - Dart & Flutter
@@ -36,7 +36,7 @@ https://github.com/AOKins/TaskManageWebsiteService
   - MySQL
   - All UIs interact with this
 
-### Work Needed
+## Work Needed
 
 - Mobile Application
   - Allow users to share content
