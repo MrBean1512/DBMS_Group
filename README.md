@@ -1,4 +1,3 @@
-*Please note that this is not compilable as is. The primary repository is on Whitgit (Whitworth's closed version of github)
 # Task Manager
 
 By David Martin and Andrew O'Kins
